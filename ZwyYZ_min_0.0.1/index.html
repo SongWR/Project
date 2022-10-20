@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | BS_Model_Looker</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">BS_Model_Looker</div>
+      </div>
+    </div>
+    <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/ZwyYZ_min_0.0.1.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/ZwyYZ_min_0.0.1.data.unityweb",
+        frameworkUrl: buildUrl + "/ZwyYZ_min_0.0.1.framework.js.unityweb",
+        codeUrl: buildUrl + "/ZwyYZ_min_0.0.1.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "BS_Model_Looker",
+        productVersion: "0.1",
+        showBanner: unityShowBanner,
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        //container.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+//      canvas.style.width = window.innerWidth + 'px';
+//      canvas.style.height = window.innerHeight + 'px';
+
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+//      canvas.style.width = "960px";
+//      canvas.style.height = "600px";
+      }
+ container.className = "unity-mobile";
+       canvas.style.width = window.innerWidth + 'px';
+       canvas.style.height = window.innerHeight + 'px';
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      var myGameInstance = null;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+        	myGameInstance=unityInstance;
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+      function message(methodName, value) {
+            myGameInstance.SendMessage('Connect', methodName, value);
+        }
+
+    	function Start()
+    	{
+    			let data={
+    				"ScenesName":"zwyyzm.ab",
+    				"ScenesPath":"https://songwr.github.io/Project/AB/",
+    				"ScenesVersion":0.1,
+    				"PrefabName":"prefab.ab",
+    				"PrefabPath":"https://songwr.github.io/Project/AB/",
+    				"PrefabVersion":0.1
+    			}
+    		message('LoadInfo',JSON.stringify(data))
+    		
+    	}
+    	//得到相机的位置
+    	 function GetCamerPos(data)
+    	{
+    			//alert(data);
+    	}
+    	//得到右键点坐标
+    	 function GetClickPos(data)
+    	{
+    			//alert(data);
+    	}
+    	 	//得到屏幕坐标
+    	 function GetScreenPoint(data)
+    	{
+    			alert(data);
+    	}    	
+    	function MouseClick(data)
+    	{
+    			//alert(data);
+    	}
+    	function MouseOver(data)
+    	{
+    		let data1=[data]
+    		message('HighLightModel',JSON.stringify(data1))
+    		//alert(data1);
+    	}
+    	function MouseOut(data)
+    	{
+    		let data1=[data]
+    		
+    	message('ColseHighForID',JSON.stringify(data1))
+    			//alert(data1);
+    	}
+    </script>
+                <style type="text/css">
+			body {
+				overflow: scroll;
+				overflow-x: hidden;
+				overflow-y: hidden;
+			} //滚动条隐藏
+		</style>
+    <div style="position:absolute;z-index:2">
+    <button type="button" onclick=message('SetModel','[{"ID":"A-01-01","Type":"Bucket_Blue","Pos":{"X":0,"Y":0,"Z":0},"Angle":0,"LabelH":0,"Scale":{"X":10,"Y":10,"Z":10}},{"ID":"A-01-01","Type":"Bucket_Blue","Pos":{"X":0,"Y":0,"Z":0},"Angle":0,"LabelH":0,"Scale":{"X":100,"Y":100,"Z":100}}]')>加模型</button>
+      <button type="button" onclick=message('ModelMove','{"ID":"A-01-01","Time":5,"Path":[[0,0,0],[5,0,0],[0,0,20],[50,0,20]]}')>模型移动</button>
+    <button type="button" onclick=message('DeleteModel','["A-01-01"]')>删除模型</button>
+    <button type="button" onclick=message('DeleteAllModel')>删除全部加模型</button>
+    
+    <button type="button" onclick=message('HighLightModel','["A-01-01","A-01-03","A-01-02"]')>高亮模型</button> 
+    <button type="button" onclick=message('ColseHighForID','["A-01-01","A-01-02"]')>关闭高亮模型</button> 
+    <button type="button" onclick=message('ColseHighAll')>关闭全部高亮模型</button> 
+    
+    <button type="button" onclick=message('SetLines','[{"ID":"line_01","Color":"#00ff16","Alpha":0.5,"LineR":0.2,"Type":"0","Points":[{"X":0,"Y":0.3,"Z":0},{"X":-32.5,"Y":0.3,"Z":2},{"X":-32.5,"Y":0.3,"Z":30}]},{"ID":"line_02","Color":"#ffff00","Alpha":0.4,"LineR":0.5,"Type":"1","Points":[{"X":0,"Y":0.3,"Z":0},{"X":32.5,"Y":0.3,"Z":2},{"X":32.5,"Y":0.3,"Z":30}]}]')>加线</button>
+    <button type="button" onclick=message('DeleteLines','["line_01"]')>删除线</button>
+    <button type="button" onclick=message('DeleteAllLines')>删除全部线</button>
+    
+    <button type="button" onclick=message('SetAreas','[{"ID":"Area_01","Color":"#62c680","Alpha":0.3,"Points":[{"X":60,"Y":80,"Z":0},{"X":-60,"Y":80,"Z":-60},{"X":-60,"Y":-80,"Z":0},{"X":60,"Y":-80,"Z":-60}]},{"ID":"Area_02","Color":"#ff0000","Alpha":0.3,"Points":[{"X":60,"Y":0,"Z":0},{"X":-60,"Y":0,"Z":-60},{"X":-60,"Y":-0,"Z":0},{"X":60,"Y":-0,"Z":-60}]}]')>加面</button>
+    <button type="button" onclick=message('DeleteAreas','["Area_01"]')>删除面</button>
+    <button type="button" onclick=message('DeleteAllAreas')>删除全部面</button>
+    
+    <button type="button" onclick=message('SetWorldPoint','[{"ID":"Point_1","Pos":[0,0,0]},{"ID":"Point_2","Pos":[30,0,20]}]')>设置转换点</button>
+    
+    <button type="button" onclick=message('ReadCamerPos')>读取相机位置</button>
+    <button type="button" onclick=message('SetCamerPos','{"Loca":["-0.91","10.8","-8.03","39.63","350.95"],"Time":3}')>设置相机位置</button>
+    <button type="button" onclick=message('SetBackGroundImg','https://img.1ppt.com/uploads/allimg/1910/1_191025201728_2.jpg')>设置背景图片</button>
+    <button type="button" onclick=message('OpenWareHouse',1)>打开仓库</button>
+    <button type="button" onclick=message('ClosenWareHouse')>关闭仓库</button>
+    
+    <button type="button" onclick=message('CreatCubeTag','[{"X":0,"Y":0,"Z":0,"Length":100,"Width":100,"High":100,"Angle":30,"ID":"cube_1","Color":"#ff0000","Alpha":0.3},{"X":1,"Y":0,"Z":1,"Length":200,"Width":100,"High":10,"ID":"cube_2","Color":"#ffff00","Alpha":0.6}]')>创建方形标记</button>
+    <button type="button" onclick=message('DeleteCubeTags')>删除全部方形标记</button>
+     <button type="button" onclick=message('DeleteCubeTag','["cube_2"]')>删除方形标记</button>
+       <button type="button" onclick=message('OpenTerrainTag','{"High":"10","Color":"#ff0000","Alpha":"0.4"}')>打开区域范围</button>
+         <button type="button" onclick=message('CloseTerrainTag')>关闭区域范围</button>
+    <button type="button" onclick=message('InitialSet','{"CamMoveSpeed":1.5,"CamRotSpeed":1}')>初始设置</button>
+    
+    </div>
+  </body>
+</html>

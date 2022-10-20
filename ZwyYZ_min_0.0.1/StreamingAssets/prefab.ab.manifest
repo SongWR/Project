@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+CRC: 2341538825
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bee9ec6d0f8fa459abdc9c152f11c3f7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 604e30fee882d7e97f0841c0fad7bc34
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: eafe0b1fe897c59438493bb432fac5df, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Prefab/Cube.prefab
+- Assets/Prefab/HouTou.prefab
+Dependencies: []
